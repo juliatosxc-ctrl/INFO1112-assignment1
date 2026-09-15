@@ -40,7 +40,7 @@ for ((i=start; i<${#lines[@]}; i++)); do
     reg="$(echo "$reg" | tr -d '[:space:]')"
     addr="$(echo "$addr" | tr -d '[:space:]')"
 
-    opcode_value="${OPCODES[$name]}"
+    opcode_value="${OPCODES[$name:-]}"
     if [ -z "$opcode_value" ]; then
         echo "Error: Unknown opcode '$name' in line $((i+1))." >&2
         exit 1
