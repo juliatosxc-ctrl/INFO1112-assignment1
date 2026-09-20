@@ -1,0 +1,97 @@
++ set -euo pipefail
++ '[' 1 -eq 0 ']'
++ '[' 1 -gt 1 ']'
++ input_file=prog1.vsc
++ output_file=prog1.bin
++ '[' '!' -f prog1.vsc ']'
++ [[ prog1.vsc != *.vsc ]]
++ '[' '!' -s prog1.vsc ']'
++ OPCODES=(['LOAD']='1' ['STORE']='2' ['ADD']='3' ['SUB']='4' ['QUIT']='8' ['PRINT']='9')
++ declare -A OPCODES
++ mapfile -t lines
+++ tr -d '\r'
+++ grep -v '^[[:space:]]*$'
+++ echo
++ n_values=2
++ :
++ (( i=1 ))
++ (( i<=n_values ))
++ value=20
+++ printf '\\x%02x' 20
++ printf '\x14'
++ (( i++ ))
++ (( i<=n_values ))
++ value=40
+++ printf '\\x%02x' 40
++ printf '\x28'
++ (( i++ ))
++ (( i<=n_values ))
++ start=3
++ (( i=start ))
++ (( i<7 ))
++ line=LOAD,0,0
++ IFS=,
++ read -r name reg addr
+++ echo LOAD
+++ tr -d '[:space:]'
+++ tr '[:lower:]' '[:upper:]'
++ name=LOAD
+++ echo 0
+++ tr -d '[:space:]'
++ reg=0
+++ echo 0
+++ tr -d '[:space:]'
++ addr=0
++ opcode_value=1
++ '[' -z 1 ']'
++ '[' LOAD == QUIT ']'
++ byte1=4
++ byte2=0
+++ printf '\\x%02x' 4
++ printf '\x04'
+++ printf '\\x%02x' 0
++ printf '\x00'
++ (( i++ ))
++ (( i<7 ))
++ line=PRINT,0,0
++ IFS=,
++ read -r name reg addr
+++ echo PRINT
+++ tr -d '[:space:]'
+++ tr '[:lower:]' '[:upper:]'
++ name=PRINT
+++ echo 0
+++ tr -d '[:space:]'
++ reg=0
+++ echo 0
+++ tr -d '[:space:]'
++ addr=0
++ opcode_value=9
++ '[' -z 9 ']'
++ '[' PRINT == QUIT ']'
++ byte1=36
++ byte2=0
+++ printf '\\x%02x' 36
++ printf '\x24'
+++ printf '\\x%02x' 0
++ printf '\x00'
++ (( i++ ))
++ (( i<7 ))
++ line=QUIT,0,0
++ IFS=,
++ read -r name reg addr
+++ echo QUIT
+++ tr -d '[:space:]'
+++ tr '[:lower:]' '[:upper:]'
++ name=QUIT
+++ echo 0
+++ tr -d '[:space:]'
++ reg=0
+++ echo 0
+++ tr -d '[:space:]'
++ addr=0
++ opcode_value=8
++ '[' -z 8 ']'
++ '[' QUIT == QUIT ']'
++ break
++ echo 'Assembled '\''prog1.vsc'\'' into '\''prog1.bin'\''.'
