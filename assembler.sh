@@ -124,7 +124,7 @@ if [ "$n_values" -eq 0 ] && [ "$instr_count" -eq 1 ] && [ "$only_quit" = true ];
         printf "%02x\n" "$b"
     done
     exit 0
-else if ["$is_add_or_sub" = true] then
+elif ["$is_add_or_sub" = true] then
     echo "This is an ADD/SUB program"
     echo "The content of the .bin file is"
     for b in "${bytes[@]}"; do
