@@ -128,6 +128,6 @@ fi
 
 echo "The content of the .bin file is"
 for b in "${bytes[@]}"; do
-    printf "%02x " "$b"
+    printf "%02x\n" "$b"
 done
 exit 0
