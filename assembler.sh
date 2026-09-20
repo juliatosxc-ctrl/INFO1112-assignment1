@@ -29,6 +29,12 @@ if [[ "$input_file" != *.vsc ]]; then
     exit 1
 fi
 
+# emtpy file
+if [ ! -s "$input_file" ]; then
+    echo "usage: the file is empty – no .bin file is produced"
+    exit 1
+fi
+
 declare -A OPCODES=(
     [LOAD]=1 [STORE]=2 [ADD]=3 [SUB]=4 [QUIT]=8 [PRINT]=9
 )
