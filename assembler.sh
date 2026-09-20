@@ -17,8 +17,11 @@ fi
 input_file="$1"
 #creating the output file name by replacing the .vsc extension with .bin
 output_file="${input_file%.vsc}.bin"
+
 #variable for if its an adding or subtracting instruction
 is_add_or_sub=false
+only_quit=false
+inst_count=0
 
 # if the argument is not a file nor does it exist
 if [ ! -f "$input_file" ]; then
@@ -40,9 +43,7 @@ fi
 
 
 # mapping of instruction names to their corresponding opcode values
-declare -A OPCODES=(
-    [LOAD]=1 [STORE]=2 [ADD]=3 [SUB]=4 [QUIT]=8 [PRINT]=9
-)
+declare -A OPCODES=([LOAD]=1 [STORE]=2 [ADD]=3 [SUB]=4 [QUIT]=8 [PRINT]=9)
 
 # read every line from the input file into an array, ignoring empty lines
 mapfile -t lines < <(tr -d '\r' < "$input_file" | grep -v '^[[:space:]]*$'; echo)
@@ -50,14 +51,14 @@ mapfile -t lines < <(tr -d '\r' < "$input_file" | grep -v '^[[:space:]]*$'; echo
 #reads the first line - the number of static values (bytes) - into a variable
 n_values="${lines[0]}"
 
-# creates the output .bin file, ready to append the data
-: > "$output_file"
+bytes=()
 
 # write n_values, then each static value, as raw bytes
 for ((i=1; i<=n_values; i++)); do
-    value="${lines[$i]}"
-    printf "$(printf '\\x%02x' "$value")" >> "$output_file"
+    bytes="${lines[$i]}"
 done
+
+
 
 # encode and write instructions
 start=$((n_values + 1))
@@ -82,11 +83,14 @@ for ((i=start; i<${#lines[@]}; i++)); do
         exit 1
     fi
 
-    # tracking if its an add or subtract program
+    instr_count=$((instr_count + 1))
+
     if [ "$name" == "ADD" ] || [ "$name" == "SUB" ]; then
         is_add_or_sub=true
     fi
-    
+    if [ "$name" != "QUIT" ]; then
+        only_quit=true
+    fi
 
     # 6 bit opcode (shifted by 2 bits) and 2 bit register number are combined into a single byte
     byte1=$(( (opcode_value <<2 ) | (reg & 0x03) ))
@@ -95,8 +99,8 @@ for ((i=start; i<${#lines[@]}; i++)); do
     byte2=$(( addr & 0xFF ))
 
     # write the two bytes to the output file as raw bytes
-    printf "$(printf '\\x%02x' "$byte1")" >> "$output_file"
-    printf "$(printf '\\x%02x' "$byte2")" >> "$output_file"
+    # printf "$(printf '\\x%02x' "$byte1")" >> "$output_file"
+    # printf "$(printf '\\x%02x' "$byte2")" >> "$output_file"
 
     # if opcode is QUIT then exit the loop and do not write any more instructions
     if [ "$name" == "QUIT" ]; then
@@ -105,6 +109,25 @@ for ((i=start; i<${#lines[@]}; i++)); do
 
 done
 
-echo "Assembled '$input_file' into '$output_file'."
+# creates the output .bin file, ready to append the data
+: > "$output_file"
+for byte in "${bytes[@]}"; do
+    printf "$(printf '\\x%02x' "$byte")" >> "$output_file"
+done
+
+
+if [ "$n_values" -eq 0 ] && [ "$instr_count" -eq 1 ] && [ "$only_quit" = true ]; then
+    echo "It is a QUIT program"
+    exit 0
+fi
 
 # what you print to the console if its an add or subtract program
+if [ "$is_add_or_sub" = true ]; then
+    echo "It is an ADD/SUB program"
+fi
+
+echo "The content of the .bin file is"
+for b in "${bytes[@]}"; do
+    printf "%02x " "$b"
+done
+exit 0
