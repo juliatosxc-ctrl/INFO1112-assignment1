@@ -54,10 +54,11 @@ n_values="${lines[0]}"
 bytes=()
 
 # write n_values, then each static value, as raw bytes
-for ((i=1; i<=n_values; i++)); do
-    bytes="${lines[$i]}"
-done
-
+if [ "$n_values" -gt 0 ]; then
+    for ((i=1; i<=n_values; i++)); do
+        bytes+=("${lines[$i]}")
+    done
+fi
 
 
 # encode and write instructions
