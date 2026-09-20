@@ -13,16 +13,19 @@ if [ "$#" -gt 1 ]; then
     exit 1
 fi
 
-
-
-
-
+# sets variables for input and output files
 input_file="$1"
 output_file="${input_file%.vsc}.bin"
 
 # if the argument is not a file nor does it exist
 if [ ! -f "$input_file" ]; then
     echo "usage: input is not a file or it does not exist"
+    exit 1
+fi
+
+# invalid file extension
+if [[ "$input_file" != *.vsc ]]; then
+    echo "usage: input does not have the extension .vsc"
     exit 1
 fi
 
