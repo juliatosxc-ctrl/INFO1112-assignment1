@@ -118,7 +118,6 @@ done
 
 if [ "$n_values" -eq 0 ] && [ "$instr_count" -eq 1 ] && [ "$only_quit" = true ]; then
     echo "It is a QUIT program"
-    exit 0
 fi
 
 # what you print to the console if its an add or subtract program
