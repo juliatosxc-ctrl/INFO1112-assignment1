@@ -43,7 +43,7 @@ declare -A OPCODES=(
 )
 
 # read every line from the input file into an array, ignoring empty lines
-mapfile -t lines < <(grep -v "^[[:space:]]*$" "$input_file")
+mapfile -t lines < <(tr -d '\r' < "$input_file" | grep -v '^[[:space:]]*$'; echo)
 
 #reads the first line - the number of static values (bytes) - into a variable
 n_values="${lines[0]}"
