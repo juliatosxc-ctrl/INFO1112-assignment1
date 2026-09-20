@@ -20,7 +20,7 @@ output_file="${input_file%.vsc}.bin"
 
 #variable for if its an adding or subtracting instruction
 is_add_or_sub=false
-only_quit=false
+only_quit=true
 instr_count=0
 
 # if the argument is not a file nor does it exist
@@ -100,8 +100,8 @@ for ((i=start; i<${#lines[@]}; i++)); do
     byte2=$(( addr & 0xFF ))
 
     # write the two bytes to the output file as raw bytes
-    # printf "$(printf '\\x%02x' "$byte1")" >> "$output_file"
-    # printf "$(printf '\\x%02x' "$byte2")" >> "$output_file"
+    bytes+=("$byte1")
+    bytes+=("$byte2")
 
     # if opcode is QUIT then exit the loop and do not write any more instructions
     if [ "$name" == "QUIT" ]; then
