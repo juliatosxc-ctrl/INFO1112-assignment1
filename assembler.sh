@@ -21,7 +21,7 @@ output_file="${input_file%.vsc}.bin"
 #variable for if its an adding or subtracting instruction
 is_add_or_sub=false
 only_quit=false
-inst_count=0
+instr_count=0
 
 # if the argument is not a file nor does it exist
 if [ ! -f "$input_file" ]; then
