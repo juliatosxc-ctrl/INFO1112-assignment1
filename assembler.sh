@@ -80,10 +80,7 @@ for ((i=start; i<${#lines[@]}; i++)); do
         exit 1
     fi
 
-    # if opcode is QUIT then exit the loop and do not write any more instructions
-    if [ "$name" == "QUIT" ]; then
-        break
-    fi
+    
 
     # 6 bit opcode (shifted by 2 bits) and 2 bit register number are combined into a single byte
     byte1=$(( (opcode_value <<2 ) | (reg & 0x03) ))
@@ -94,6 +91,11 @@ for ((i=start; i<${#lines[@]}; i++)); do
     # write the two bytes to the output file as raw bytes
     printf "$(printf '\\x%02x' "$byte1")" >> "$output_file"
     printf "$(printf '\\x%02x' "$byte2")" >> "$output_file"
+
+    # if opcode is QUIT then exit the loop and do not write any more instructions
+    if [ "$name" == "QUIT" ]; then
+        break
+    fi
 
 done
 
