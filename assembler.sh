@@ -2,7 +2,7 @@
 set -euo pipefail
 
 if [ "$#" -ne 1 ]; then
-    echo "Usage: $0 <input_file>"
+    echo "usage: no argument is provided" >&2
     exit 1
 fi
 
