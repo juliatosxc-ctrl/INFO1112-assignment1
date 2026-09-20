@@ -134,5 +134,5 @@ if [ "$is_add_or_sub" = true ]; then
         printf "%02x\n" "$b"
     done
     exit 0
-
+fi
 
