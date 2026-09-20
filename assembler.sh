@@ -48,6 +48,7 @@ mapfile -t lines < <(grep -v "^[[:space:]]*$" "$input_file")
 #reads the first line - the number of static values (bytes) - into a variable
 n_values="${lines[0]}"
 
+# creates the output .bin file, ready to append the data
 : > "$output_file"
 
 # write n_values, then each static value, as raw bytes
@@ -60,20 +61,33 @@ done
 start=$((n_values + 1))
 for ((i=start; i<${#lines[@]}; i++)); do
     line="${lines[i]}"
+
+    # split name, reg and addr into seperate fields, trimming whitespace and converting name to uppercase
     IFS=',' read -r name reg addr <<< "$line"
+    
+    #normalise instruction name to uppercase and remove whitespace from name, reg and addr
     name="$(echo "$name" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]')"
+
+    # strip whitespace from reg and addr
     reg="$(echo "$reg" | tr -d '[:space:]')"
     addr="$(echo "$addr" | tr -d '[:space:]')"
 
+
+    #look up the opcode value for the instruction name, and check if it is valid
     opcode_value="${OPCODES[$name]:-}"
     if [ -z "$opcode_value" ]; then
         echo "Error: Unknown opcode '$name' in line $((i+1))." >&2
         exit 1
     fi
 
+    # 6 bit opcode (shifted by 2 bits) and 2 bit register number are combined into a single byte
     byte1=$(( (opcode_value <<2 ) | (reg & 0x03) ))
+
+    # the 6 byte memory address
     byte2=$(( addr & 0xFF ))
 
+
+    # write the two bytes to the output file as raw bytes
     printf "$(printf '\\x%02x' "$byte1")" >> "$output_file"
     printf "$(printf '\\x%02x' "$byte2")" >> "$output_file"
 
