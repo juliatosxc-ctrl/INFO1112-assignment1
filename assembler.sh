@@ -6,6 +6,11 @@ if [ "$#" -eq 0 ]; then
     exit 1
 fi
 
+if [ "$#" -gt 1 ]; then
+    echo "usage: more than one arguments are provided"
+    exit 1
+fi
+
 input_file="$1"
 output_file="${input_file%.vsc}.bin"
 
