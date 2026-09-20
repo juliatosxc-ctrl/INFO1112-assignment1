@@ -15,6 +15,7 @@ fi
 
 # sets variables for input and output files
 input_file="$1"
+#creating the output file name by replacing the .vsc extension with .bin
 output_file="${input_file%.vsc}.bin"
 
 # if the argument is not a file nor does it exist
@@ -35,12 +36,16 @@ if [ ! -s "$input_file" ]; then
     exit 1
 fi
 
+
+# mapping of instruction names to their corresponding opcode values
 declare -A OPCODES=(
     [LOAD]=1 [STORE]=2 [ADD]=3 [SUB]=4 [QUIT]=8 [PRINT]=9
 )
 
+# read every line from the input file into an array, ignoring empty lines
 mapfile -t lines < <(grep -v "^[[:space:]]*$" "$input_file")
 
+#reads the first line - the number of static values (bytes) - into a variable
 n_values="${lines[0]}"
 
 : > "$output_file"
