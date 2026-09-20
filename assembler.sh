@@ -1,8 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
-if [ "$#" -ne 1 ]; then
-    echo "usage: no argument is provided" >&2
+if [ "$#" -eq 0 ]; then
+    echo "usage: no argument is provided"
     exit 1
 fi
 
