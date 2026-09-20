@@ -17,6 +17,8 @@ fi
 input_file="$1"
 #creating the output file name by replacing the .vsc extension with .bin
 output_file="${input_file%.vsc}.bin"
+#variable for if its an adding or subtracting instruction
+is_add_or_sub=false
 
 # if the argument is not a file nor does it exist
 if [ ! -f "$input_file" ]; then
@@ -80,6 +82,10 @@ for ((i=start; i<${#lines[@]}; i++)); do
         exit 1
     fi
 
+    # tracking if its an add or subtract program
+    if [ "$name" == "ADD" ] || [ "$name" == "SUB" ]; then
+        is_add_or_sub=true
+    fi
     
 
     # 6 bit opcode (shifted by 2 bits) and 2 bit register number are combined into a single byte
@@ -101,3 +107,4 @@ done
 
 echo "Assembled '$input_file' into '$output_file'."
 
+# what you print to the console if its an add or subtract program
