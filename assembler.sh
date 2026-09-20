@@ -51,7 +51,6 @@ n_values="${lines[0]}"
 : > "$output_file"
 
 # write n_values, then each static value, as raw bytes
-printf "$(printf '\\x%02x' "$n_values")" >> "$output_file"
 for ((i=1; i<=n_values; i++)); do
     value="${lines[$i]}"
     printf "$(printf '\\x%02x' "$value")" >> "$output_file"
