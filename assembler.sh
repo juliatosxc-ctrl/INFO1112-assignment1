@@ -119,15 +119,20 @@ done
 
 if [ "$n_values" -eq 0 ] && [ "$instr_count" -eq 1 ] && [ "$only_quit" = true ]; then
     echo "It is a QUIT program"
+    echo "The content of the .bin file is"
+    for b in "${bytes[@]}"; do
+        printf "%02x\n" "$b"
+    done
+    exit 0
 fi
 
 # what you print to the console if its an add or subtract program
 if [ "$is_add_or_sub" = true ]; then
     echo "It is an ADD/SUB program"
+    echo "The content of the .bin file is"
+    for b in "${bytes[@]}"; do
+        printf "%02x\n" "$b"
+    done
+    exit 0
 fi
 
-echo "The content of the .bin file is"
-for b in "${bytes[@]}"; do
-    printf "%02x\n" "$b"
-done
-exit 0
