@@ -1,21 +1,28 @@
 #!/bin/bash
 set -euo pipefail
 
+# no argument is provided
 if [ "$#" -eq 0 ]; then
     echo "usage: no argument is provided"
     exit 1
 fi
 
+# more than one argument is provided
 if [ "$#" -gt 1 ]; then
     echo "usage: more than one arguments are provided"
     exit 1
 fi
 
+
+
+
+
 input_file="$1"
 output_file="${input_file%.vsc}.bin"
 
+# if the argument is not a file nor does it exist
 if [ ! -f "$input_file" ]; then
-    echo "Error: Input file '$input_file' not found." >&2
+    echo "usage: input is not a file or it does not exist"
     exit 1
 fi
 
